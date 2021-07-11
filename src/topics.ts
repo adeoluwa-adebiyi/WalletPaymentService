@@ -1,0 +1,1 @@
+export const WALLET_CREDIT_FUNDS_REQUEST_TOPIC = "public.wallet.events.credit_fund_request";
