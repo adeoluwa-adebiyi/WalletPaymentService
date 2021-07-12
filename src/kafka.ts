@@ -4,7 +4,7 @@ import config from "../src/config";
 
 export class KafkaService {
 
-    static INSTANCE=null;
+    static INSTANCE;
 
     private kafkaClient: Kafka;
 
@@ -13,9 +13,9 @@ export class KafkaService {
     private kafkaProducer: KafkaProducer;
 
     constructor(){
-        // this.kafkaClient = undefined;
-        // this.kafkaConsumer = undefined;
-        // this.kafkaProducer = undefined;
+        this.kafkaClient = null;
+        this.kafkaConsumer = null;
+        this.kafkaProducer = null;
     }
 
     static async getInstance(): Promise<KafkaService>{
@@ -24,7 +24,7 @@ export class KafkaService {
             this.INSTANCE.kafkaClient = new Kafka(<KafkaConfig>{
                 clientId: WALLET_API_SERVICE,
                 brokers: [
-                    config.KAFKA_BROKER_URL
+                    config.KAFKA_BOOTSTRAP_SERVER
                 ]
              });
             this.INSTANCE.kafkaConsumer = this.INSTANCE.kafkaClient.consumer({

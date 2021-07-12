@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 dotenv.config()
 
 export default {
-    KAFKA_BROKER_URL: process.env.KAFKA_BROKER_URL,
+    KAFKA_BOOTSTRAP_SERVER: process.env.KAFKA_BOOTSTRAP_SERVER,
     DB_URL: process.env.DB_URL,
     ...process.env
 };
