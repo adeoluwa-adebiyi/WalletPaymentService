@@ -3,7 +3,7 @@ import { Message } from "./interface/message";
 export class CreditWalletReqMessage implements Message {
     entityId: string;
     version: string = "1";
-    name: String = "credit-wallet";
+    name: String = "credit-wallet-request";
     data: any;
     walletUserId: number;
     amount: number;
@@ -60,6 +60,11 @@ export class CreditWalletReqMessage implements Message {
         this.amount = data.amount;
         this.walletId = data.userId;
         this.walletUserId = data.walletUserId;
+        this.cardNo = data.cardNo;
+        this.cardUsername = data.cardUsername;
+        this.cardCCV = data.cardCCV;
+        this.cardPIN = data.cardPIN;
+        this.cardExp = data.cardExp;
         return this;
     }
 
