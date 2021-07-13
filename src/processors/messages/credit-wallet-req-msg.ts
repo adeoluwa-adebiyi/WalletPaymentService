@@ -9,14 +9,14 @@ export class CreditWalletReqMessage implements Message {
     amount: number;
     cardNo: String;
     cardUsername: String;
-    cardCCV: String;
+    cardCVV: String;
     cardPIN: String;
     cardExp: String;
     walletId: any;
 
-    constructor(walletUserId: number, amount: number, walletId: number, cardNo: String,
+    constructor(walletUserId: number, amount: number, walletId: String, cardNo: String,
         cardUsername: String,
-        cardCCV: String,
+        cardCVV: String,
         cardPIN: String,
         cardExp: String) {
         this.walletUserId = walletUserId;
@@ -24,7 +24,7 @@ export class CreditWalletReqMessage implements Message {
         this.walletId = walletId;
         this.cardNo = cardNo;
         this.cardUsername = cardUsername;
-        this.cardCCV = cardCCV;
+        this.cardCVV = cardCVV;
         this.cardPIN = cardPIN;
         this.cardExp = cardExp;
     }
@@ -48,7 +48,7 @@ export class CreditWalletReqMessage implements Message {
                 amount: this.amount,
                 cardNo: this.cardNo,
                 cardUsername: this.cardUsername,
-                cardCCV: this.cardCCV,
+                cardCVV: this.cardCVV,
                 cardPIN: this.cardPIN,
                 cardExp: this.cardExp
             }
@@ -62,7 +62,7 @@ export class CreditWalletReqMessage implements Message {
         this.walletUserId = data.walletUserId;
         this.cardNo = data.cardNo;
         this.cardUsername = data.cardUsername;
-        this.cardCCV = data.cardCCV;
+        this.cardCVV = data.cardCVV;
         this.cardPIN = data.cardPIN;
         this.cardExp = data.cardExp;
         return this;
