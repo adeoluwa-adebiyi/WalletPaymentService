@@ -6,13 +6,21 @@ const walletCreditRequestSchema = new Schema({
         unique:true,
         required: [true, "requestId required"]
     },
+    userId: {
+        type: String,
+        required: [true, "userId required"]
+    },
     status: {
         type: String,
-        enum: ["pending", "success", "failure"],
-        default: "pending"
+        enum: ["init","pending", "pending-failure","validation-needed","validation-attempt", "success", "failure"],
+        default: "init"
     },
     amount:{
         type: Number
+    },
+    email: {
+        type: String,
+        required: [true, "email is required"]
     },
     currency:{
         type: String,
@@ -24,6 +32,14 @@ const walletCreditRequestSchema = new Schema({
         required: true
     },
     cardData:{
+        type: Object
+    },
+    paymentGateway:{
+        type: String,
+        enum: ["FLUTTERWAVE", "PAYSTACK"],
+        default: "FLUTTERWAVE"
+    },
+    metadata: {
         type: Object
     }
 },

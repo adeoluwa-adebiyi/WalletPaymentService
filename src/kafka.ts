@@ -22,7 +22,7 @@ export class KafkaService {
         if(!this.INSTANCE){
             this.INSTANCE = new KafkaService();
             this.INSTANCE.kafkaClient = new Kafka(<KafkaConfig>{
-                clientId: WALLET_API_SERVICE,
+                // clientId: WALLET_API_SERVICE,
                 brokers: [
                     config.KAFKA_BOOTSTRAP_SERVER
                 ]

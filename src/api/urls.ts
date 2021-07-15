@@ -1,0 +1,1 @@
+export const FLUTTERWAVE_CHARGE_CARD_ENDPOINT = "https://api.flutterwave.com/v3/charges?type=card";
