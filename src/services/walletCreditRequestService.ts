@@ -1,7 +1,11 @@
 import { Document, Model } from "mongoose";
 import { isPartiallyEmittedExpression } from "typescript";
+import { KafkaJSEventBus } from "../bus/event-bus";
 import walletCreditRequest, { WalletCreditRequest, WalletCreditRequestStatus } from "../db/models/walletCreditRequest";
+import { sendMessage } from "../helpers/messaging";
+import { KafkaService } from "../kafka";
 import { CreditWalletReqMessage } from "../processors/messages/credit-wallet-req-msg";
+import { WalletCreditMessage } from "../processors/messages/wallet-credit-message";
 import { FlutterwavePaymentStrategy } from "../strategies/payment/flutterwave";
 
 export type VerificationType = "OTP" | "GOOGLE_AUTH";
@@ -32,6 +36,12 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
                         const status = await FlutterwavePaymentStrategy.getInstance().authenticateWithOtp(otp, request.metadata.flw_ref);
                         if(status){
                             await updateRequestStatus(request, "success");
+                            await sendMessage(new KafkaJSEventBus( (await KafkaService.getInstance()).producer), "public.wallet.money", new WalletCreditMessage({
+                                currency: request?.currency,
+                                walletId: request?.walletId,
+                                amount: request?.amount,
+                                userId: request?.userId
+                            }))
                         }else{
                             await updateRequestStatus(request, "failure");
                         }
