@@ -27,6 +27,10 @@ export const ensurePaymentUserAuthorized = async(requestId:String, userId:String
     if(request.userId !== userId){
         throw Error("invalid transaction attempt")
     }else{
+        try{
         cb();
+        }catch(e){
+            throw e;
+        }
     }
 }

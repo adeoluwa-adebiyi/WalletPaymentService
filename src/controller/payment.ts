@@ -8,6 +8,7 @@ const paymentInitController = async (req: any, res: any) => {
             throw Error("requestId is required!");
         }
         await ensurePaymentUserAuthorized(requestId, req.user.id, async () => {
+            try{
             const verificationType: VerificationType = await walletCreditRequestService.makePaymentPerRequest(requestId);
             switch (verificationType) {
                 case "OTP":
@@ -24,6 +25,12 @@ const paymentInitController = async (req: any, res: any) => {
                         verification: null
                     });
             }
+        }catch(e){
+            res.status(500).json({
+                status:"failure",
+                message: e.message
+            });
+        }
         });
 
     } catch (e) {
