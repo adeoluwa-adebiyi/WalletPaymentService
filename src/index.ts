@@ -36,7 +36,7 @@ const processCreditFundRequest = async ()=>{
                 const savedRequest = await walletCreditRequestService.persistCreditRequestMessage(credWalletReqMsg);
                 console.log("SAVED_REQUEST:");
                 console.log(savedRequest);
-                await walletCreditRequestService.persistCreditRequestMessage(credWalletReqMsg);
+                // await walletCreditRequestService.persistCreditRequestMessage(credWalletReqMsg);
                 // strategy.pay(credWalletReqMsg.amount,credWalletReqMsg.currency, credWalletReqMsg.requestId, {
                 //     cardNo, cardUsername, cardExp, cardPIN, cardCVV, enckey: config.FL_ENCKEY, email, currency
                 // })

@@ -112,6 +112,7 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
                 await updateRequestStatus(request, "pending-failure");
                 throw Error("payment failed to retrive otp challenge")
             } catch (e) {
+                console.log(e);
                 throw Error("payment failed");
             }
         }

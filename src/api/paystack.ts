@@ -1,11 +1,14 @@
 import { AxiosService } from "../config/axios"
 import { FLUTTERWAVE_CHARGE_CARD_ENDPOINT } from "./urls";
 
-import * as Flutterwave from "flutterwave-node-v3";
+import * as Paystack from "paystack-node";
 import config from "../config";
 import walletCreditRequest, { WalletCreditRequest } from "../db/models/walletCreditRequest";
 
-const flw = new Flutterwave(config.FLUTTERWAVE_PUB_KEY, config.FLUTTERWAVE_SECRET_KEY);
+let APIKEY = 'sk_live_2hWyQ6HW73jS8p1IkXmSWOlE4y9Inhgyd6g5f2R7'
+const environment = process.env.NODE_ENV
+
+const paystack = new Paystack(APIKEY);
 
 export interface FlutterChargeCardPayload{
     card_number: String;
@@ -26,28 +29,44 @@ export interface FlutterChargeCardPayload{
 
 export const chargeCard = async (payload: FlutterChargeCardPayload, pin:String, requestId: String) => {
     try {
-        const response = await flw.Charge.card(payload);
-        console.log("PAYMENT_API:");
-        console.log(response);
-        if (response.meta.authorization.mode === 'pin') {
-            let payload2 = payload
-            payload2.authorization = {
-                "mode": "pin",
-                "fields": [
-                    "pin"
-                ],
-                "pin": pin
-            }
-            const reCallCharge = await flw.Charge.card(payload2)
 
-            // console.log("*******************************")    
-            // console.log("VALID WITH PIN");        
-            // console.log(reCallCharge);
-            await persistValidationRef(reCallCharge.data.flw_ref, requestId);
-            return reCallCharge;
-        }else{
-            throw Error("payment failed: authorization mode not available");
-        }
+        // call the real API methods
+        const { body } = paystack.chargeCard({
+            card:{
+            number: payload.card_number, // mastercard
+            cvv: payload.cvv,
+            expiry_year: payload.expiry_year,
+            expiry_month: payload.expiry_month
+            },
+            email: payload.email,
+            amount: payload.amount // 156,000 Naira in kobo
+        });
+
+        console.log(body);
+
+
+        // const response = await paystack.Charge.card(payload);
+        // console.log("PAYMENT_API:");
+        // console.log(response);
+        // if (response.meta.authorization.mode === 'pin') {
+        //     let payload2 = payload
+        //     payload2.authorization = {
+        //         "mode": "pin",
+        //         "fields": [
+        //             "pin"
+        //         ],
+        //         "pin": pin
+        //     }
+        //     const reCallCharge = await paystack.Charge.card(payload2)
+
+        //     // console.log("*******************************")    
+        //     // console.log("VALID WITH PIN");        
+        //     // console.log(reCallCharge);
+        //     await persistValidationRef(reCallCharge.data.flw_ref, requestId);
+        //     return reCallCharge;
+        // }else{
+        //     throw Error("payment failed: authorization mode not available");
+        // }
     } catch (error) {
         console.log(error)
         throw error;
@@ -57,7 +76,7 @@ export const chargeCard = async (payload: FlutterChargeCardPayload, pin:String, 
 
 export const validateTransactionWithOTP = async(flw_ref:String,otp: String): Promise<Boolean> => {
     try{
-        const callValidate = await flw.Charge.validate({
+        const callValidate = await paystack.Charge.validate({
             otp,
             "flw_ref":flw_ref
         })
