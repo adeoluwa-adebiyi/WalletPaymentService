@@ -26,6 +26,7 @@ const paymentInitController = async (req: any, res: any) => {
                     });
             }
         }catch(e){
+            console.log(e);
             res.status(500).json({
                 status:"failure",
                 message: e.message
@@ -34,6 +35,7 @@ const paymentInitController = async (req: any, res: any) => {
         });
 
     } catch (e) {
+        console.log(e);
         res.status(500).json({
             status:"failure",
             message: e.message
