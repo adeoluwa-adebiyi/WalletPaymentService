@@ -9,16 +9,6 @@ import  walletCreditRequestService  from "./services/walletCreditRequestService"
 import { connect } from "./db/connection";
 import app from "./app";
 
-// const kafka:Kafka = new Kafka(<KafkaConfig>{
-//    clientId: WALLET_API_SERVICE,
-//    brokers: [
-//        config.KAFKA_BOOTSTRAP_SERVER
-//    ]
-// });
-
-// const consumer: KafkaConsumer = kafka.consumer({
-//     groupId: WALLET_API_SERVICE,
-// });
 
 const processCreditFundRequest = async ()=>{
     const kafkaService = await KafkaService.getInstance();

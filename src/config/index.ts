@@ -9,6 +9,7 @@ export default {
     FL_ENCKEY: process.env.FL_ENCKEY,
     DB_URL: process.env.DB_URL,
     APP_SECRET: process.env.APP_SECRET,
+    PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
     PORT: process.env.POST,
     ...process.env
 };

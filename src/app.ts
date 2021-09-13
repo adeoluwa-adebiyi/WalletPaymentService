@@ -18,6 +18,8 @@ app.use(express.json());
 
 app.use(cookieParser());
 
+app.use("/v", BaseRoutes.vendorRoutes);
+
 app.use("/pay", BaseRoutes.paymentRoutes);
 
 app.use(helmet());
