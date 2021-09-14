@@ -1,0 +1,26 @@
+
+[
+    { "id": "1", "name": "Access Bank" ,"localInterbankCode":"044" },
+    { "id": "2", "name": "Citibank","localInterbankCode":"023" },
+    { "id": "3", "name": "Diamond Bank","localInterbankCode":"063" },
+    { "id": "4", "name": "Dynamic Standard Bank","localInterbankCode":"" },
+    { "id": "5", "name": "Ecobank Nigeria","localInterbankCode":"050" },
+    { "id": "6", "name": "Fidelity Bank Nigeria","localInterbankCode":"070" },
+    { "id": "7", "name": "First Bank of Nigeria","localInterbankCode":"011" },
+    { "id": "8", "name": "First City Monument Bank","localInterbankCode":"214" },
+    { "id": "9", "name": "Guaranty Trust Bank","localInterbankCode":"058" },
+    { "id": "10", "name": "Heritage Bank Plc","localInterbankCode":"030" },
+    { "id": "11", "name": "Jaiz Bank","localInterbankCode":"301" },
+    { "id": "12", "name": "Keystone Bank Limited","localInterbankCode":"082" },
+    { "id": "13", "name": "Providus Bank Plc","localInterbankCode":"101" },
+    { "id": "14", "name": "Polaris Bank","localInterbankCode":"076" },
+    { "id": "15", "name": "Stanbic IBTC Bank Nigeria Limited","localInterbankCode":"221" },
+    { "id": "16", "name": "Standard Chartered Bank","localInterbankCode":"068" },
+    { "id": "17", "name": "Sterling Bank","localInterbankCode":"232" },
+    { "id": "18", "name": "Suntrust Bank Nigeria Limited","localInterbankCode":"100" },
+    { "id": "19", "name": "Union Bank of Nigeria","localInterbankCode":"032" },
+    { "id": "20", "name": "United Bank for Africa","localInterbankCode":"033" },
+    { "id": "21", "name": "Unity Bank Plc","localInterbankCode":"215" },
+    { "id": "22", "name": "Wema Bank","localInterbankCode":"035" },
+    { "id": "23", "name": "Zenith Bank","localInterbankCode":"057" }
+]

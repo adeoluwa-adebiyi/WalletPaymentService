@@ -1,13 +1,16 @@
-import { Consumer as KafkaConsumer, EachBatchPayload, Kafka, KafkaConfig } from "kafkajs";
+import { Consumer as KafkaConsumer, EachBatchPayload } from "kafkajs";
 import * as topics from "./topics";
 import config from "../src/config";
-import { WALLET_API_SERVICE } from "./constants";
 import { KafkaService } from "./kafka";
 import { CreditWalletReqMessage } from "./processors/messages/credit-wallet-req-msg";
 import { FlutterwavePaymentStrategy } from "./strategies/payment/flutterwave";
 import  walletCreditRequestService  from "./services/walletCreditRequestService";
 import { connect } from "./db/connection";
 import app from "./app";
+import { matchMessage } from "./helpers/messages";
+import { BankPayoutMessage, BANK_PAYOUT_MSG } from "./processors/messages/bank-payout-msg";
+import PayoutService from "./services/payout-service";
+import { WALLET_API_SERVICE } from "./constants";
 
 
 const processCreditFundRequest = async ()=>{
@@ -32,11 +35,32 @@ const processCreditFundRequest = async ()=>{
                 // })
             }
         }
-    })
+    });
+}
+
+
+const processTrxEvents = async ()=>{
+    const kafkaService = await KafkaService.getInstance(`${WALLET_API_SERVICE}-trx-events`);
+    await kafkaService.consumer.subscribe({ topic: topics.WALLET_TRX_TOPIC, });
+
+    await kafkaService.consumer.run({
+        autoCommit:true,
+        eachBatch: async(payload: EachBatchPayload) => {
+            for (let message of payload.batch.messages){
+                console.log(message.value.toString());
+                matchMessage(BANK_PAYOUT_MSG, message.value.toString(), new BankPayoutMessage(), handleBankPayoutEvent)
+            }
+        }
+    });
+}
+
+const handleBankPayoutEvent = async(message: BankPayoutMessage) =>{
+    await PayoutService.processBankPayoutMessage(message);
 }
 
 
 connect().then(async connection => {
     processCreditFundRequest();
+    processTrxEvents();
     app.listen(config.PORT);
 });

@@ -10,7 +10,7 @@ const environment = process.env.NODE_ENV
 
 const paystack = new Paystack(APIKEY);
 
-export interface FlutterChargeCardPayload{
+export interface FlutterChargeCardPayload {
     card_number: String;
     cvv: String;
     expiry_month: String;
@@ -27,16 +27,16 @@ export interface FlutterChargeCardPayload{
 }
 
 
-export const chargeCard = async (payload: FlutterChargeCardPayload, pin:String, requestId: String) => {
+export const chargeCard = async (payload: FlutterChargeCardPayload, pin: String, requestId: String) => {
     try {
 
         // call the real API methods
         const { body } = paystack.chargeCard({
-            card:{
-            number: payload.card_number, // mastercard
-            cvv: payload.cvv,
-            expiry_year: payload.expiry_year,
-            expiry_month: payload.expiry_month
+            card: {
+                number: payload.card_number, // mastercard
+                cvv: payload.cvv,
+                expiry_year: payload.expiry_year,
+                expiry_month: payload.expiry_month
             },
             email: payload.email,
             amount: payload.amount // 156,000 Naira in kobo
@@ -74,27 +74,48 @@ export const chargeCard = async (payload: FlutterChargeCardPayload, pin:String, 
 }
 
 
-export const validateTransactionWithOTP = async(flw_ref:String,otp: String): Promise<Boolean> => {
-    try{
+export const validateTransactionWithOTP = async (flw_ref: String, otp: String): Promise<Boolean> => {
+    try {
         const callValidate = await paystack.Charge.validate({
             otp,
-            "flw_ref":flw_ref
+            "flw_ref": flw_ref
         })
         console.log(callValidate)
         return callValidate?.status === "success" ?? false;
-    }catch(e){
+    } catch (e) {
         console.log(e);
         throw e;
     }
 }
 
-export const persistValidationRef= async(flutterwaveRef:String, requestId:String) => {
-    try{
-        const record = await walletCreditRequest.findOne({requestId});
-        record.metadata = {flw_ref: flutterwaveRef};
+export const persistValidationRef = async (flutterwaveRef: String, requestId: String) => {
+    try {
+        const record = await walletCreditRequest.findOne({ requestId });
+        record.metadata = { flw_ref: flutterwaveRef };
         await record.save();
-    }catch(e){
+    } catch (e) {
         console.log(e);
         throw e;
+    }
+}
+
+export const createRecepient = async (name: String, acount: number, localInterBankCode: String, swiftCode?: String) => {
+    try {
+        const response = await Axios.post("", {
+            type: "nuban",
+
+            name: "Zombie",
+
+            description: "Zombier",
+
+            account_number: "01000000010",
+
+            bank_code: "044",
+
+            currency: "NGN"
+
+        });
+    } catch (e) {
+
     }
 }

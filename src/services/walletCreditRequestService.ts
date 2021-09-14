@@ -1,5 +1,5 @@
 import { Document, Model } from "mongoose";
-import { KafkaJSEventBus } from "../bus/event-bus";
+import eventBus, { KafkaJSEventBus } from "../bus/event-bus";
 import walletCreditRequest, { WalletCreditRequest, WalletCreditRequestStatus } from "../db/models/walletCreditRequest";
 import { sendMessage } from "../helpers/messaging";
 import { KafkaService } from "../kafka";
@@ -51,7 +51,7 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
             });
             request.metadata = payload.data;
             await updateRequestStatus(request, TRXN_SUCCESS);
-            await sendMessage(new KafkaJSEventBus( (await KafkaService.getInstance()).producer), "public.wallet.money", new WalletCreditMessage({
+            await sendMessage(await eventBus, "public.wallet.money", new WalletCreditMessage({
                 currency: request?.currency,
                 walletId: request?.walletId,
                 amount: request?.amount,
@@ -70,7 +70,7 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
                         const status = await FlutterwavePaymentStrategy.getInstance().authenticateWithOtp(otp, request.metadata.flw_ref);
                         if(status){
                             await updateRequestStatus(request, TRXN_SUCCESS);
-                            await sendMessage(new KafkaJSEventBus( (await KafkaService.getInstance()).producer), "public.wallet.money", new WalletCreditMessage({
+                            await sendMessage(await eventBus, "public.wallet.money", new WalletCreditMessage({
                                 currency: request?.currency,
                                 walletId: request?.walletId,
                                 amount: request?.amount,
