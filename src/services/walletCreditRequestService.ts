@@ -49,6 +49,7 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
             const request = await walletCreditRequest.findOne({
                 requestId
             });
+            console.log(request);
             request.metadata = payload.data;
             await updateRequestStatus(request, TRXN_SUCCESS);
             await sendMessage(await eventBus, "public.wallet.money", new WalletCreditMessage({

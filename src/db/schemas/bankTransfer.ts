@@ -12,6 +12,9 @@ const bankTransferSchema = new Schema({
     },
     swiftCode: {
         type: String,
+    },
+    country:{
+        type: String
     }
 });
 
