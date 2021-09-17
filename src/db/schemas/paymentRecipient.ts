@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import { v4 } from "uuid";
 
-const paymentRecepientSchema = new Schema({
+const paymentRecipientSchema = new Schema({
     id: {
         type: String,
         default: () => v4()
@@ -13,9 +13,23 @@ const paymentRecepientSchema = new Schema({
         type: String,
         required: true
     },
-    orignator: {
+    bankId:{
         type: String,
         required: true
+    },
+    account: {
+        type: String,
+        required: true
+    },
+    orignator: {
+        type: String,
+        required: true,
+        enum: ["paystack", "flutterwave"],
+        default: "paystack"
+    },
+    country:{
+        type: String,
+        required: [true, "country is required"]
     },
     issuer: {
         type: String,
@@ -26,4 +40,4 @@ const paymentRecepientSchema = new Schema({
     timestamps: true
 });
 
-export default paymentRecepientSchema;
+export default paymentRecipientSchema;

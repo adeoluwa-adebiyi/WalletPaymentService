@@ -10,6 +10,8 @@ export default {
     DB_URL: process.env.DB_URL,
     APP_SECRET: process.env.APP_SECRET,
     PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
+    WALLETS_AFRICA_SECRET_KEY: process.env.WALLETS_AFRICA_SECRET_KEY,
+    WALLETS_AFRICA_PUB_KEY: process.env.WALLETS_AFRICA_PUB_KEY,
     PORT: process.env.POST,
     ...process.env
 };

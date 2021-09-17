@@ -8,9 +8,10 @@ import  walletCreditRequestService  from "./services/walletCreditRequestService"
 import { connect } from "./db/connection";
 import app from "./app";
 import { matchMessage } from "./helpers/messages";
-import { BankPayoutMessage, BANK_PAYOUT_MSG } from "./processors/messages/bank-payout-msg";
+import { BankPayoutMessage, BANK_PAYOUT_MSG, FulfillBankPayoutMessage, FULFILL_BANK_PAYOUT_MSG } from "./processors/messages/bank-payout-message";
 import PayoutService from "./services/payout-service";
 import { WALLET_API_SERVICE } from "./constants";
+import { TransferVerificationMessage } from "./processors/messages/TransferVerificationMessage";
 
 
 const processCreditFundRequest = async ()=>{
@@ -39,6 +40,7 @@ const processCreditFundRequest = async ()=>{
 }
 
 
+const TRANSFER_VERIFICATION_MESSAGE = "transfer-verification-message";
 const processTrxEvents = async ()=>{
     const kafkaService = await KafkaService.getInstance(`${WALLET_API_SERVICE}-trx-events`);
     await kafkaService.consumer.subscribe({ topic: topics.WALLET_TRX_TOPIC, });
@@ -48,14 +50,14 @@ const processTrxEvents = async ()=>{
         eachBatch: async(payload: EachBatchPayload) => {
             for (let message of payload.batch.messages){
                 console.log(message.value.toString());
-                matchMessage(BANK_PAYOUT_MSG, message.value.toString(), new BankPayoutMessage(), handleBankPayoutEvent)
+                matchMessage(FULFILL_BANK_PAYOUT_MSG, message.value.toString(), new FulfillBankPayoutMessage(), handleBankPayoutEvent)
             }
         }
     });
 }
 
-const handleBankPayoutEvent = async(message: BankPayoutMessage) =>{
-    await PayoutService.processBankPayoutMessage(message);
+const handleBankPayoutEvent = async(message: FulfillBankPayoutMessage) =>{
+    await PayoutService.processBankPayoutMessage(new FulfillBankPayoutMessage().deserialize(message.serialize()));
 }
 
 

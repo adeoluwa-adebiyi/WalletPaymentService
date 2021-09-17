@@ -6,4 +6,7 @@ const router = Router();
 
 router.post("/paystack", paystackWebhookOriginValidator, VendorController.paystackWebhookController);
 
+router.post("/walletsAfrica", VendorController.walletsAfricaController);
+
+
 export default router;

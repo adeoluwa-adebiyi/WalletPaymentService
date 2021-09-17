@@ -5,6 +5,7 @@ export interface BankParams extends Document<any> {
     id: String;
     name: String;
     localInterBankCode: String,
+    country: String,
     swiftCode: String
 }
 
