@@ -4,6 +4,10 @@ import { PayoutRepo } from "./interface/payout-repo.interface";
 
 export class PayoutRepoImpl implements PayoutRepo{
 
+    async getPayout(payout: Partial<BankPayoutParams>): Promise<any> {
+        return await bankTransfer.findOne({...payout});
+    }
+
     async savePayout(payout: BankPayoutParams): Promise<any> {
         return await new bankTransfer({...payout}).save();
     }

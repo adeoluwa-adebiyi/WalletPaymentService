@@ -8,7 +8,8 @@ const transferSchema = new Schema({
     },
     requestId: {
         type: String,
-        default: ()=> uuidv4()
+        default: ()=> uuidv4(),
+        unique: true
     },
     description: {
         type: String,

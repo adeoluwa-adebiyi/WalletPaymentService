@@ -87,17 +87,22 @@ export class PayoutServiceImpl implements PayoutService {
 
     async processBankPayoutMessage(message: BankPayoutParams): Promise<void> {
         try {
-            const payoutMsg = await PayoutRepo.savePayout({
-                ...message
-            });
-            const status = await this.makeBankTransfer(message);
-            console.log("STATUS:" + status);
-            if (status) {
-                await sendMessage(await eventBus, WALLET_TRX_EVENTS_TOPIC, new TransferCompletedMessage({
-                    transferRequestId: message.requestId
-                }));
-            } else {
-                throw Error("Payment failed");
+            const existingPayout = await PayoutRepo.getPayout({...message});
+            if(!existingPayout){
+                const payoutMsg = await PayoutRepo.savePayout({
+                    ...message
+                });
+                const status = await this.makeBankTransfer(message);
+                console.log("STATUS:" + status);
+                if (status) {
+                    await sendMessage(await eventBus, WALLET_TRX_EVENTS_TOPIC, new TransferCompletedMessage({
+                        transferRequestId: message.requestId
+                    }));
+                } else {
+                    throw Error("Payment failed");
+                }
+            }else{
+                throw Error("Repeated transaction");
             }
         } catch (e) {
             throw e;
