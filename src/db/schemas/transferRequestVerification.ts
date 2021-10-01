@@ -1,14 +1,12 @@
 import { Schema, SchemaTypes } from "mongoose";
-import eventBus from "../../bus/event-bus";
-import { sendMessage } from "../../helpers/messaging";
-import { TransferVerificationMessage } from "../../processors/messages/TransferVerificationMessage";
-import { WALLET_TRX_EVENTS_TOPIC } from "../../topics";
 import { TransferVerificationParams } from "../models/transferRequestVerification";
+import key from "./key";
 
 export const transferTypes = ["wallet-transfer", "bank-transfer", "fx-bank-transfer"];
 export type TransferType = "wallet-transfer"|"bank-transfer"|"fx-transfer";
 
 const transferVerificationSchema = new Schema({
+    ...key,
     transferRequestId: {
         type: String,
         required: true

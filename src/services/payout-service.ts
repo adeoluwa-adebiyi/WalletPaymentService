@@ -1,4 +1,4 @@
-import { BankPayoutParams } from "../processors/messages/bank-payout-message";
+import { BankPayoutMessage, BankPayoutParams } from "../processors/messages/bank-payout-message";
 import PayoutRepo from "../repo/payout-repo";
 import BankRepo from "../repo/bank-repo";
 import PaymentReceipientRepo from "../repo/payment-receipient-repo";
@@ -9,6 +9,8 @@ import { WALLET_TRX_EVENTS_TOPIC } from "../topics";
 import { TransferCompletedMessage } from "../processors/messages/TransferCompletedMessage";
 import WalletsAfricaPayoutApi from "../api/payouts";
 import { PaymentRecipient } from "../db/models/paymentRecipient";
+import { createMessage } from "../utils";
+import { Message } from "../processors/messages/interface/message";
 
 
 const paystackPay = async (params: BankPayoutParams, recipient: PaymentRecipient): Promise<Boolean> => {
@@ -93,9 +95,12 @@ export class PayoutServiceImpl implements PayoutService {
             const status = await this.makeBankTransfer(message);
             console.log("STATUS:" + status);
             if (status) {
-                await sendMessage(await eventBus, WALLET_TRX_EVENTS_TOPIC, new TransferCompletedMessage({
+                const transferCompletedMessage = createMessage<TransferCompletedMessage, String>(
+                    TransferCompletedMessage,
+                    {
                     transferRequestId: message.requestId
-                }));
+                }, (message as BankPayoutMessage).getKey());
+                await sendMessage(await eventBus, WALLET_TRX_EVENTS_TOPIC, transferCompletedMessage);
             } else {
                 throw Error("Payment failed");
             }

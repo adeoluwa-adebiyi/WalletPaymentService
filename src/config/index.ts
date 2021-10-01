@@ -8,6 +8,7 @@ export default {
     FLUTTERWAVE_PUB_KEY: process.env.FLUTTERWAVE_PUB_KEY,
     FL_ENCKEY: process.env.FL_ENCKEY,
     DB_URL: process.env.DB_URL,
+    WALLETS_API_TYPE: process.env.WALLETS_API_TYPE,
     APP_SECRET: process.env.APP_SECRET,
     PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
     WALLETS_AFRICA_SECRET_KEY: process.env.WALLETS_AFRICA_SECRET_KEY,

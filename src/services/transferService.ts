@@ -5,6 +5,7 @@ import { WALLET_TRX_EVENTS_TOPIC } from "../topics";
 import { TransferVerificationParams } from "../db/models/transferRequestVerification";
 import transferRequestVerficationRepo from "../repo/transfer-request-verfication-repo";
 import { TransferCompletedMessage } from "../processors/messages/TransferCompletedMessage";
+import { createMessage } from "../utils";
 
 
 export interface TransferService {
@@ -18,9 +19,12 @@ class TransferServiceImpl implements TransferService {
         const params = await transferRequestVerficationRepo.findVerification(requestId);
         if (!params.approved)
             throw Error("Illegal transaction");
-        await sendMessage(await eventBus, WALLET_TRX_EVENTS_TOPIC, new TransferCompletedMessage({
+        const transferCompletedMessage = createMessage<TransferCompletedMessage, String>(
+            TransferCompletedMessage,
+            {
             transferRequestId: params.transferRequestId
-        }));
+        }, params.key);
+        await sendMessage(await eventBus, WALLET_TRX_EVENTS_TOPIC, transferCompletedMessage);
         return params;
     }
 

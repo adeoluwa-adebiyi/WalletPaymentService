@@ -30,6 +30,7 @@ export class CreditWalletReqMessage implements Message {
     requestId: String;
     email: String;
     currency: String;
+    key?: String;
 
     constructor(params?: CreditWalletReqParams) {
         this.walletUserId = params?.walletUserId;
@@ -49,8 +50,12 @@ export class CreditWalletReqMessage implements Message {
         return this.version;
     }
 
-    getKey(): string {
-        throw new Error("Method not implemented.");
+    getKey(): String {
+        return this.key;
+    }
+
+    setKey(key: String){
+        this.key = key;
     }
 
     serialize(): string {
@@ -69,8 +74,10 @@ export class CreditWalletReqMessage implements Message {
                 cardExp: this.cardExp,
                 requestId: this.requestId,
                 email: this.email,
-                currency: this.currency
-            }
+                currency: this.currency,
+                key: this.key
+            },
+            key: this?.key
         })
     }
 
@@ -88,6 +95,7 @@ export class CreditWalletReqMessage implements Message {
         this.requestId = data.requestId;
         this.email = data.email;
         this.currency = data.currency;
+        this.key = obj?.key;
         return this;
     }
 

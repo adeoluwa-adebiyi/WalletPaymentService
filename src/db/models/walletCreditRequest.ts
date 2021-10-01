@@ -31,6 +31,7 @@ export interface WalletCreditRequest{
     cardData: CardDetails;
     paymentGateway: PaymentGateway;
     metadata: WalletCreditRequestMetaData;
+    key?: String;
 };
 
 export default model<WalletCreditRequest>("walletCreditRequest", walletCreditRequestSchema);

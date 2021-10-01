@@ -1,6 +1,8 @@
 import { Schema, SchemaTypes } from "mongoose";
+import key from "./key";
 
 const walletCreditRequestSchema = new Schema({
+    ...key,
     requestId: {
         type: String,
         unique:true,

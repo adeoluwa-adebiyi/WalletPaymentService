@@ -6,6 +6,7 @@ import { KafkaService } from "../kafka";
 import { CreditWalletReqMessage } from "../processors/messages/credit-wallet-req-msg";
 import { WalletCreditMessage } from "../processors/messages/wallet-credit-message";
 import { FlutterwavePaymentStrategy } from "../strategies/payment/flutterwave";
+import { createMessage } from "../utils";
 
 export type VerificationType = "OTP" | "GOOGLE_AUTH";
 
@@ -52,12 +53,13 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
             console.log(request);
             request.metadata = payload.data;
             await updateRequestStatus(request, TRXN_SUCCESS);
-            await sendMessage(await eventBus, "public.wallet.money", new WalletCreditMessage({
+            const walletCreditMsg = createMessage<WalletCreditMessage, String>(WalletCreditMessage,{
                 currency: request?.currency,
                 walletId: request?.walletId,
                 amount: request?.amount,
                 userId: request?.userId
-            }));
+            }, request.key);
+            await sendMessage(await eventBus, "public.wallet.money", walletCreditMsg);
         }
     }
     
@@ -71,12 +73,13 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
                         const status = await FlutterwavePaymentStrategy.getInstance().authenticateWithOtp(otp, request.metadata.flw_ref);
                         if(status){
                             await updateRequestStatus(request, TRXN_SUCCESS);
-                            await sendMessage(await eventBus, "public.wallet.money", new WalletCreditMessage({
+                            const walletCreditMsg = createMessage<WalletCreditMessage, String>(WalletCreditMessage,{
                                 currency: request?.currency,
                                 walletId: request?.walletId,
                                 amount: request?.amount,
                                 userId: request?.userId
-                            }));
+                            }, request.userId);
+                            await sendMessage(await eventBus, "public.wallet.money", walletCreditMsg);
                         }else{
                             await updateRequestStatus(request, TRXN_FAILURE);
                         }

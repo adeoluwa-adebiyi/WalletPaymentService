@@ -17,6 +17,7 @@ export class WalletCreditMessage implements Message{
     currency: String;
     walletId: String;
     userId: String;
+    key?: String;
 
     constructor(params?: WalletCreditMessageParams){
         this.amount = params?.amount;
@@ -24,13 +25,16 @@ export class WalletCreditMessage implements Message{
         this.walletId = params?.walletId;
         this.userId = params?.userId;
     }
+    setKey(key: any): void {
+        this.key = key;
+    }
 
     getVersion(): string {
         throw new Error("Method not implemented.");
     }
 
-    getKey(): string {
-        throw new Error("Method not implemented.");
+    getKey(): String {
+        return this.key;
     }
 
     serialize(): string {
@@ -43,7 +47,8 @@ export class WalletCreditMessage implements Message{
                 currency: this.currency,
                 walletId: this.walletId,
                 userId: this.userId
-            }
+            },
+            key: this.key
         })
     }
 
@@ -56,6 +61,7 @@ export class WalletCreditMessage implements Message{
         this.currency = data.currency;
         this.walletId = data.walletId;
         this.userId = data.userId;
+        this.key = object?.key;
         return this;
     }
 }

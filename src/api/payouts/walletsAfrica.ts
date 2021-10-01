@@ -3,7 +3,7 @@ import { PaymentRecipient } from "../../db/models/paymentRecipient";
 import Axios from "axios";
 import { BankPayoutParams } from "../../processors/messages/bank-payout-message";
 
-const type = "sandbox";
+const type = config.WALLETS_API_TYPE;
 
 const WALLETS_TRANSFER_ENDPOINT = `https://${type}.wallets.africa/transfer/bank/account`;
 

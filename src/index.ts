@@ -49,8 +49,11 @@ const processTrxEvents = async ()=>{
         autoCommit:true,
         eachBatch: async(payload: EachBatchPayload) => {
             for (let message of payload.batch.messages){
-                console.log(message.value.toString());
-                matchMessage(FULFILL_BANK_PAYOUT_MSG, message.value.toString(), new FulfillBankPayoutMessage(), handleBankPayoutEvent)
+                try{
+                    matchMessage(FULFILL_BANK_PAYOUT_MSG, message.value.toString(), new FulfillBankPayoutMessage(), handleBankPayoutEvent, message.key.toString());
+                }catch(e){
+                    console.log(e);
+                }
             }
         }
     });

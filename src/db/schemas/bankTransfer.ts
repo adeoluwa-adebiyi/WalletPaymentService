@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 
+
 const bankTransferSchema = new Schema({
     sourceWalletId: {
         type: String,
