@@ -119,7 +119,8 @@ export class WalletCreditRequestServiceImpl implements WalletCreditRequestServic
             },
             metadata: {
                 flw_ref: null
-            }
+            },
+            key: creditRequestMessage.key ?? walletUserId
         });
     }
 

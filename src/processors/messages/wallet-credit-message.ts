@@ -30,7 +30,7 @@ export class WalletCreditMessage implements Message{
     }
 
     getVersion(): string {
-        throw new Error("Method not implemented.");
+        return this.version.toString();
     }
 
     getKey(): String {
